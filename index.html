@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestione Spese Cloud</title>
-<!-- Icona personalizzata per la schermata Home -->
+  <!-- Icona personalizzata per la schermata Home -->
   <link rel="icon" type="image/png" href="icon.png">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png?v=2">
   
   <!-- Librerie di Firebase (v8: App, Firestore, Auth) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -227,12 +227,12 @@
 
       <div class="card">
         <h3 class="card-title" style="color: var(--accent-blue);">Registra Spesa 💸</h3>
-<div class="card" style="border-left: 4px solid var(--accent-orange);">
-        <h3 class="card-title" style="color: var(--accent-orange);">Scansiona Scontrino 📸</h3>
-        <input type="file" id="file-scontrino" accept="image/*" capture="environment" style="font-size:12px; padding:8px;" />
-        <button style="background-color: var(--accent-orange);" onclick="leggiScontrino()">Estrai Importo da Scontrino</button>
-        <p id="ocr-status" class="subtitle" style="margin-top: 6px;"></p>
-      </div>
+        <div class="card" style="border-left: 4px solid var(--accent-orange);">
+          <h3 class="card-title" style="color: var(--accent-orange);">Scansiona Scontrino 📸</h3>
+          <input type="file" id="file-scontrino" accept="image/*" capture="environment" style="font-size:12px; padding:8px;" />
+          <button style="background-color: var(--accent-orange);" onclick="leggiScontrino()">Estrai Importo da Scontrino</button>
+          <p id="ocr-status" class="subtitle" style="margin-top: 6px;"></p>
+        </div>
         <input type="number" id="importo" placeholder="Importo (€)" step="0.01" />
         <select id="categoria">
           <option value="Alimentari">Alimentari 🛒</option>
@@ -377,7 +377,6 @@
   // Controllo dello stato di autenticazione in tempo reale
   auth.onAuthStateChanged((user) => {
     if (user) {
-      // Utente loggato: mostra l'app e nascondi il login
       document.getElementById('vista-login').classList.remove('attiva');
       document.getElementById('contenuto-protetto').style.display = 'block';
       document.getElementById('email-utente-connesso').textContent = user.email;
@@ -393,7 +392,6 @@
 
       caricaDatiHome();
     } else {
-      // Utente non loggato: mostra la schermata di login
       document.getElementById('contenuto-protetto').style.display = 'none';
       document.getElementById('vista-login').classList.add('attiva');
     }
@@ -433,7 +431,6 @@
     if(idVista === 'vista-prestiti') caricaPrestiti();
   }
 
-  // Riferimento al percorso privato dell'utente loggato nel database
   function colUtente(nomeCollezione) {
     const uid = auth.currentUser.uid;
     return db.collection("users").doc(uid).collection(nomeCollezione);
@@ -683,46 +680,47 @@
       .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
       .catch((e) => { console.error("Errore eliminazione:", e); });
   }
-async function leggiScontrino() {
-  const input = document.getElementById('file-scontrino');
-  const status = document.getElementById('ocr-status');
-  
-  if (input.files.length === 0) {
-    alert("Seleziona o scatta una foto dello scontrino.");
-    return;
-  }
-  
-  const file = input.files[0];
-  status.textContent = "Elaborazione OCR in corso... Attendere.";
 
-  try {
-    const result = await Tesseract.recognize(file, 'ita', {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          status.textContent = `Analisi: ${Math.round(m.progress * 100)}%`;
-        }
-      }
-    });
-
-    const testoRiconosciuto = result.data.text;
-    status.textContent = "Scansione completata!";
+  async function leggiScontrino() {
+    const input = document.getElementById('file-scontrino');
+    const status = document.getElementById('ocr-status');
     
-    const regexImporto = /(\d+[\.,]\d{2})/g;
-    const match = testoRiconosciuto.match(regexImporto);
-
-    if (match && match.length > 0) {
-      let importoTrovato = match[match.length - 1].replace(',', '.');
-      document.getElementById('importo').value = importoTrovato;
-      document.getElementById('nota').value = "Scontrino scansionato";
-      alert(`Trovato importo: €${importoTrovato}. Valore inserito nel modulo spesa!`);
-    } else {
-      alert("Impossibile rilevare un importo chiaro. Inseriscilo manualmente.");
+    if (input.files.length === 0) {
+      alert("Seleziona o scatta una foto dello scontrino.");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    status.textContent = "Errore durante la lettura dello scontrino.";
+    
+    const file = input.files[0];
+    status.textContent = "Elaborazione OCR in corso... Attendere.";
+
+    try {
+      const result = await Tesseract.recognize(file, 'ita', {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            status.textContent = `Analisi: ${Math.round(m.progress * 100)}%`;
+          }
+        }
+      });
+
+      const testoRiconosciuto = result.data.text;
+      status.textContent = "Scansione completata!";
+      
+      const regexImporto = /(\d+[\.,]\d{2})/g;
+      const match = testoRiconosciuto.match(regexImporto);
+
+      if (match && match.length > 0) {
+        let importoTrovato = match[match.length - 1].replace(',', '.');
+        document.getElementById('importo').value = importoTrovato;
+        document.getElementById('nota').value = "Scontrino scansionato";
+        alert(`Trovato importo: €${importoTrovato}. Valore inserito nel modulo spesa!`);
+      } else {
+        alert("Impossibile rilevare un importo chiaro. Inseriscilo manualmente.");
+      }
+    } catch (err) {
+      console.error(err);
+      status.textContent = "Errore durante la lettura dello scontrino.";
+    }
   }
-}
 </script>
 
 </body>

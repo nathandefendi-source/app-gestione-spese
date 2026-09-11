@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Spese Cloud</title>
+  
+  <!-- Librerie di Firebase (v8: App, Firestore, Auth) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <!-- Libreria per il Grafico a Torta -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f7f7f9;
+      --card-bg: #ffffff;
+      --text-main: #1c1c1e;
+      --text-muted: #8e8e93;
+      --border-color: #e5e5ea;
+      --accent-blue: #007aff;
+      --accent-green: #34c759;
+      --accent-red: #ff3b30;
+      --accent-orange: #ff9500;
+      --input-bg: #f2f2f7;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0; padding: 0;
+      display: flex; justify-content: center;
+      padding-bottom: 90px;
+    }
+
+    .app-container {
+      width: 100%; max-width: 480px;
+      padding: 20px; box-sizing: border-box;
+    }
+
+    .user-header {
+      margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .user-header h1 {
+      font-size: 24px; font-weight: 700; margin: 0; letter-spacing: -0.5px;
+    }
+    .subtitle {
+      font-size: 13px; color: var(--text-muted); margin: 4px 0 0 0;
+    }
+
+    .saldo-card {
+      background: var(--card-bg); padding: 20px;
+      border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.02);
+    }
+    .label-piccola {
+      font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase;
+    }
+    .saldo-card h2 {
+      margin: 6px 0 0 0; font-size: 28px; font-weight: 700; color: var(--accent-blue);
+    }
+    .trend-badge {
+      font-size: 11px; color: var(--accent-green); font-weight: 600; margin-top: 6px;
+    }
+
+    .card {
+      background: var(--card-bg); padding: 16px;
+      border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.02);
+    }
+    .card-title {
+      font-size: 14px; font-weight: 600; margin: 0 0 12px 0; color: var(--text-main);
+    }
+
+    .selettore-mese-card {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg); padding: 12px 16px; border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 16px; font-size: 13px; font-weight: 500;
+    }
+    .selettore-mese-card input {
+      border: none; background: transparent; font-weight: 600; color: var(--accent-blue); font-family: inherit; font-size: 13px; width: auto; margin:0;
+    }
+
+    input, select, button {
+      width: 100%; padding: 12px 14px; margin-bottom: 10px;
+      border: 1px solid var(--border-color); border-radius: 12px;
+      box-sizing: border-box; font-size: 14px; font-family: inherit;
+      background-color: var(--input-bg); color: var(--text-main); outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent-blue); background-color: #fff;
+    }
+
+    button {
+      background-color: var(--accent-blue); color: white; border: none; font-weight: 600; cursor: pointer;
+    }
+    button:active { transform: scale(0.98); }
+
+    .btn-elimina {
+      background-color: rgba(255, 59, 48, 0.1); color: var(--accent-red); border: none;
+      padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; width: auto; margin: 0;
+    }
+    .btn-modifica {
+      background-color: rgba(255, 149, 0, 0.1); color: var(--accent-orange); border: none;
+      padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; width: auto; margin: 0;
+    }
+    .btn-logout {
+      background-color: rgba(255, 59, 48, 0.1); color: var(--accent-red); width: auto; padding: 6px 12px; font-size: 12px; margin: 0;
+    }
+
+    ul { list-style-type: none; padding: 0; margin: 0; }
+    li {
+      background: var(--input-bg); padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; font-size: 13px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .categoria-card {
+      background: var(--input-bg); padding: 12px 14px; border-radius: 12px; margin-bottom: 8px;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-blue);
+      font-size: 13px; font-weight: 600;
+    }
+
+    .mese-riga {
+      display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 13px;
+    }
+    .mese-riga:last-child { border-bottom: none; }
+
+    .prestiti-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .colonna-prestiti {
+      background: var(--card-bg); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000;
+    }
+    .nav-item {
+      background: transparent; border: none; color: var(--text-muted);
+      display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 500; cursor: pointer; width: auto; margin:0; padding:4px;
+    }
+    .nav-icon { font-size: 18px; margin-bottom: 2px; }
+    .nav-item.attiva { color: var(--accent-blue); }
+
+    .vista { display: none; }
+    .vista.attiva { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ================= VISTA LOGIN ================= -->
+  <div id="vista-login" class="vista">
+    <div style="text-align: center; margin: 40px 0 20px 0;">
+      <h1 style="font-size: 28px; margin-bottom: 8px;">Gestione Spese</h1>
+      <p class="subtitle">Accedi o registrati per gestire i tuoi dati in sicurezza</p>
+    </div>
+    <div class="card">
+      <input type="email" id="login-email" placeholder="La tua email" />
+      <input type="password" id="login-password" placeholder="Password (min 6 caratteri)" />
+      <button onclick="eseguiLogin()">Accedi</button>
+      <button onclick="eseguiRegistrazione()" style="background-color: var(--text-muted); margin-top: 6px;">Crea nuovo account</button>
+    </div>
+  </div>
+
+  <!-- Contenitore Principale protetto da Login -->
+  <div id="contenuto-protetto" style="display: none;">
+
+    <!-- ================= VISTA 1: HOME ================= -->
+    <div id="vista-home" class="vista attiva">
+      <header class="user-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="subtitle" id="email-utente-connesso"></p>
+        </div>
+        <button class="btn-logout" onclick="eseguiLogout()">Esci</button>
+      </header>
+
+      <div class="saldo-card">
+        <span class="label-piccola">Saldo del Mese</span>
+        <h2 id="totale-mese">€ 0,00</h2>
+        <div class="trend-badge">Spese correnti del periodo</div>
+      </div>
+
+      <div class="selettore-mese-card">
+        <span>Mese di riferimento:</span>
+        <input type="month" id="filtro-mese" onchange="caricaDatiHome()" />
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Distribuzione Categorie</h3>
+        <div style="position: relative; height:180px; width:100%;">
+          <canvas id="graficoTorta"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Categorie del Mese</h3>
+        <div id="griglia-categorie"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Storico Spese</h3>
+        <ul id="lista-spese-home"></ul>
+      </div>
+    </div>
+
+    <!-- ================= VISTA 2: OPERAZIONI ================= -->
+    <div id="vista-operazioni" class="vista">
+      <header class="user-header">
+        <h1>Nuova Transazione</h1>
+        <p class="subtitle">Registra entrate o uscite</p>
+      </header>
+
+      <div class="card">
+        <h3 class="card-title" style="color: var(--accent-blue);">Registra Spesa 💸</h3>
+        <input type="number" id="importo" placeholder="Importo (€)" step="0.01" />
+        <select id="categoria">
+          <option value="Alimentari">Alimentari 🛒</option>
+          <option value="Mediche">Mediche 💊</option>
+          <option value="Vestiario">Vestiario 👕</option>
+          <option value="Personali">Personali 🎮</option>
+          <option value="Investimenti">Investimenti 📈</option>
+          <option value="Trasporti">Trasporti 🚌</option>
+          <option value="Spese Universitarie">Spese Universitarie 📚</option>
+        </select>
+        <input type="date" id="data" />
+        <input type="text" id="nota" placeholder="Nota (es. Supermercato)" />
+        <button onclick="aggiungiSpesa()">Salva Spesa</button>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" style="color: var(--accent-green);">Registra Entrata 💰</h3>
+        <input type="number" id="importo-entrata" placeholder="Importo (€)" step="0.01" />
+        <input type="date" id="data-entrata" />
+        <input type="text" id="descrizione-entrata" placeholder="Descrizione (es. Stipendio)" />
+        <button style="background-color: var(--accent-green);" onclick="aggiungiEntrata()">Salva Entrata</button>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Storico Entrate del Mese</h3>
+        <ul id="lista-entrate-home"></ul>
+      </div>
+    </div>
+
+    <!-- ================= VISTA 3: PRESTITI ================= -->
+    <div id="vista-prestiti" class="vista">
+      <header class="user-header">
+        <h1>Rubrica Prestiti</h1>
+        <p class="subtitle">Gestisci crediti e debiti</p>
+      </header>
+
+      <div class="saldo-card" style="border-left: 4px solid var(--accent-orange);">
+        <span class="label-piccola">Bilancio Netto Prestiti</span>
+        <h2 id="totale-bilancio-prestiti" style="color: var(--accent-orange);">€ 0,00</h2>
+      </div>
+
+      <div class="prestiti-layout">
+        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-green);">
+          <h3 style="color: var(--accent-green); font-size:13px; margin-top:0;">Prestati ↗</h3>
+          <input type="text" id="prestato-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />
+          <input type="number" id="prestato-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />
+          <input type="text" id="prestato-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />
+          <button style="background-color: var(--accent-green); padding:8px; font-size:13px;" onclick="aggiungiPrestito('prestato')">Aggiungi</button>
+          <ul id="lista-prestato" style="margin-top:10px;"></ul>
+        </div>
+
+        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-red);">
+          <h3 style="color: var(--accent-red); font-size:13px; margin-top:0;">Ricevuti ↙</h3>
+          <input type="text" id="ricevuto-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />
+          <input type="number" id="ricevuto-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />
+          <input type="text" id="ricevuto-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />
+          <button style="background-color: var(--accent-red); padding:8px; font-size:13px;" onclick="aggiungiPrestito('ricevuto')">Aggiungi</button>
+          <ul id="lista-ricevuto" style="margin-top:10px;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VISTA 4: RESOCONTO ANNUALE ================= -->
+    <div id="vista-annuale" class="vista">
+      <header class="user-header">
+        <h1>Resoconto Annuale</h1>
+        <p class="subtitle">Andamento spesa sui 12 mesi</p>
+      </header>
+
+      <div class="selettore-mese-card">
+        <span>Anno di riferimento:</span>
+        <input type="number" id="filtro-anno" value="2026" onchange="caricaDatiAnnuale()" style="width: 80px;" />
+      </div>
+
+      <div class="saldo-card">
+        <span class="label-piccola">Totale Speso nell'Anno</span>
+        <h2 id="totale-anno">€ 0,00</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Dettaglio Mensile</h3>
+        <div id="lista-mesi-anno"></div>
+      </div>
+    </div>
+
+    <!-- ================= BARRA DI NAVIGAZIONE ================= -->
+    <nav class="bottom-nav">
+      <button class="nav-item attiva" onclick="cambiaTab('vista-home', this)">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="cambiaTab('vista-operazioni', this)">
+        <span class="nav-icon">➕</span>
+        <span>Operazioni</span>
+      </button>
+      <button class="nav-item" onclick="cambiaTab('vista-prestiti', this)">
+        <span class="nav-icon">🤝</span>
+        <span>Prestiti</span>
+      </button>
+      <button class="nav-item" onclick="cambiaTab('vista-annuale', this)">
+        <span class="nav-icon">📊</span>
+        <span>Annuale</span>
+      </button>
+    </nav>
+
+  </div> <!-- Fine Contenuto Protetto -->
+
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBiGs8RZGqLKN-b2cBzqFhm7J-bsJ39wO4",
+    authDomain: "applicazione-gestione-spese.firebaseapp.com",
+    projectId: "applicazione-gestione-spese",
+    storageBucket: "applicazione-gestione-spese.firebasestorage.app",
+    messagingSenderId: "333542998875",
+    appId: "1:333542998875:web:08452c5e565ab8ae00d07e",
+    measurementId: "G-72CHEXLX1L"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  const elencoCategorie = [
+    { id: "Alimentari", nome: "Alimentari 🛒", colore: "#007aff" },
+    { id: "Mediche", nome: "Mediche 💊", colore: "#ff3b30" },
+    { id: "Vestiario", nome: "Vestiario 👕", colore: "#af52de" },
+    { id: "Personali", nome: "Personali 🎮", colore: "#ff9500" },
+    { id: "Investimenti", nome: "Investimenti 📈", colore: "#34c759" },
+    { id: "Trasporti", nome: "Trasporti 🚌", colore: "#5856d6" },
+    { id: "Spese Universitarie", nome: "Spese Universitarie 📚", colore: "#ffcc00" }
+  ];
+
+  const nomiMesi = [
+    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+  ];
+
+  let mioGrafico = null;
+
+  // Controllo dello stato di autenticazione in tempo reale
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      // Utente loggato: mostra l'app e nascondi il login
+      document.getElementById('vista-login').classList.remove('attiva');
+      document.getElementById('contenuto-protetto').style.display = 'block';
+      document.getElementById('email-utente-connesso').textContent = user.email;
+
+      const oggi = new Date();
+      if(document.getElementById('data')) document.getElementById('data').valueAsDate = oggi;
+      if(document.getElementById('data-entrata')) document.getElementById('data-entrata').valueAsDate = oggi;
+      
+      const anno = oggi.getFullYear();
+      const mese = String(oggi.getMonth() + 1).padStart(2, '0');
+      if(document.getElementById('filtro-mese')) document.getElementById('filtro-mese').value = `${anno}-${mese}`;
+      if(document.getElementById('filtro-anno')) document.getElementById('filtro-anno').value = anno;
+
+      caricaDatiHome();
+    } else {
+      // Utente non loggato: mostra la schermata di login
+      document.getElementById('contenuto-protetto').style.display = 'none';
+      document.getElementById('vista-login').classList.add('attiva');
+    }
+  });
+
+  function eseguiRegistrazione() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-password').value;
+    if(!email || !pass) { alert("Inserisci email e password"); return; }
+    
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(() => { alert("Account creato con successo!"); })
+      .catch((error) => { alert("Errore: " + error.message); });
+  }
+
+  function eseguiLogin() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-password').value;
+    if(!email || !pass) { alert("Inserisci email e password"); return; }
+
+    auth.signInWithEmailAndPassword(email, pass)
+      .catch((error) => { alert("Credenziali non valide: " + error.message); });
+  }
+
+  function eseguiLogout() {
+    auth.signOut();
+  }
+
+  function cambiaTab(idVista, elementoBottone) {
+    document.querySelectorAll('.vista').forEach(v => v.classList.remove('attiva'));
+    document.getElementById(idVista).classList.add('attiva');
+
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('attiva'));
+    elementoBottone.classList.add('attiva');
+
+    if(idVista === 'vista-annuale') caricaDatiAnnuale();
+    if(idVista === 'vista-prestiti') caricaPrestiti();
+  }
+
+  // Riferimento al percorso privato dell'utente loggato nel database
+  function colUtente(nomeCollezione) {
+    const uid = auth.currentUser.uid;
+    return db.collection("users").doc(uid).collection(nomeCollezione);
+  }
+
+  function aggiungiSpesa() {
+    const importo = document.getElementById('importo').value;
+    const categoria = document.getElementById('categoria').value;
+    const data = document.getElementById('data').value;
+    const nota = document.getElementById('nota').value;
+
+    if (importo === "") { alert("Inserisci un importo valido."); return; }
+
+    colUtente("spese").add({
+      importo: parseFloat(importo), categoria, data, nota, createdAt: Date.now()
+    })
+    .then(() => {
+      document.getElementById('importo').value = '';
+      document.getElementById('nota').value = '';
+      alert("Spesa registrata nel cloud!");
+      setTimeout(() => { caricaDatiHome(); }, 500);
+    })
+    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });
+  }
+
+  function aggiungiEntrata() {
+    const importo = document.getElementById('importo-entrata').value;
+    const data = document.getElementById('data-entrata').value;
+    const descrizione = document.getElementById('descrizione-entrata').value;
+
+    if (importo === "") { alert("Inserisci un importo valido."); return; }
+
+    colUtente("entrate").add({
+      importo: parseFloat(importo), data, descrizione, createdAt: Date.now()
+    })
+    .then(() => {
+      document.getElementById('importo-entrata').value = '';
+      document.getElementById('descrizione-entrata').value = '';
+      alert("Entrata registrata nel cloud!");
+      setTimeout(() => { caricaDatiHome(); }, 500);
+    })
+    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });
+  }
+
+  async function caricaDatiHome() {
+    const grigliaCat = document.getElementById('griglia-categorie');
+    const listaHome = document.getElementById('lista-spese-home');
+    const listaEntrateHome = document.getElementById('lista-entrate-home');
+    const totaleBox = document.getElementById('totale-mese');
+    const filtroMeseEl = document.getElementById('filtro-mese');
+    
+    if (!filtroMeseEl || !auth.currentUser) return;
+    const meseSelezionato = filtroMeseEl.value;
+    
+    if(grigliaCat) grigliaCat.innerHTML = '';
+    if(listaHome) listaHome.innerHTML = '';
+    if(listaEntrateHome) listaEntrateHome.innerHTML = '';
+
+    try {
+      const querySpese = await colUtente("spese").get();
+      let speseSalvate = [];
+      querySpese.forEach((docSnap) => { speseSalvate.push({ id: docSnap.id, ...docSnap.data() }); });
+
+      const queryEntrate = await colUtente("entrate").get();
+      let entrateSalvate = [];
+      queryEntrate.forEach((docSnap) => { entrateSalvate.push({ id: docSnap.id, ...docSnap.data() }); });
+
+      let speseFiltrate = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(meseSelezionato));
+      let entrateFiltrate = entrateSalvate.filter(e => e.data && e.data.startsWith(meseSelezionato));
+
+      let totaleGeneraleMese = 0;
+      let valoriCat = [];
+
+      elencoCategorie.forEach(cat => {
+        let speseCat = speseFiltrate.filter(s => s.categoria === cat.id);
+        let totaleCat = speseCat.reduce((somma, s) => somma + parseFloat(s.importo), 0);
+        totaleGeneraleMese += totaleCat;
+        valoriCat.push(totaleCat);
+
+        if(grigliaCat) {
+          const div = document.createElement('div');
+          div.className = 'categoria-card';
+          div.style.borderLeftColor = cat.colore;
+          div.innerHTML = `<span>${cat.nome}</span><strong style="color: ${cat.colore}">€${totaleCat.toFixed(2)}</strong>`;
+          grigliaCat.appendChild(div);
+        }
+      });
+
+      if(totaleBox) totaleBox.textContent = `€ ${totaleGeneraleMese.toFixed(2)}`;
+
+      try { aggiornaGrafico(valoriCat); } catch (errGrafico) { console.log("Grafico non caricato:", errGrafico); }
+
+      if(listaHome) {
+        if (speseFiltrate.length === 0) {
+          listaHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna spesa nel periodo</li>`;
+        } else {
+          speseFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          speseFiltrate.slice().reverse().forEach(spesa => {
+            let val = parseFloat(spesa.importo);
+            const li = document.createElement('li');
+            li.innerHTML = `<div><strong>${spesa.categoria}</strong><br><span style="font-size:11px; color:var(--text-muted);">${spesa.data} • ${spesa.nota || 'Nessuna nota'}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong>€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaSpesaHome('${spesa.id}')">X</button></div>`;
+            listaHome.appendChild(li);
+          });
+        }
+      }
+
+      if(listaEntrateHome) {
+        if (entrateFiltrate.length === 0) {
+          listaEntrateHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna entrata nel periodo</li>`;
+        } else {
+          entrateFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          entrateFiltrate.slice().reverse().forEach(ent => {
+            let val = parseFloat(ent.importo);
+            const li = document.createElement('li');
+            li.innerHTML = `<div><strong style="color:var(--accent-green);">Entrata</strong><br><span style="font-size:11px; color:var(--text-muted);">${ent.data} • ${ent.descrizione || ''}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong style="color:var(--accent-green);">+€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaEntrata('${ent.id}')">X</button></div>`;
+            listaEntrateHome.appendChild(li);
+          });
+        }
+      }
+    } catch (err) { console.error("Errore caricamento:", err); }
+  }
+
+  function aggiornaGrafico(dati) {
+    const canvasEl = document.getElementById('graficoTorta');
+    if (!canvasEl) return;
+    const ctx = canvasEl.getContext('2d');
+    if (mioGrafico) mioGrafico.destroy();
+
+    mioGrafico = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: elencoCategorie.map(c => c.id),
+        datasets: [{ data: dati, backgroundColor: elencoCategorie.map(c => c.colore), borderWidth: 2, borderColor: '#ffffff' }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } } }
+    });
+  }
+
+  async function caricaDatiAnnuale() {
+    const listaMesi = document.getElementById('lista-mesi-anno');
+    const totaleAnnoBox = document.getElementById('totale-anno');
+    const annoEl = document.getElementById('filtro-anno');
+    if(!listaMesi || !annoEl || !auth.currentUser) return;
+
+    const annoSelezionato = annoEl.value;
+    listaMesi.innerHTML = '';
+
+    try {
+      const querySpese = await colUtente("spese").get();
+      let speseSalvate = [];
+      querySpese.forEach((docSnap) => { speseSalvate.push(docSnap.data()); });
+
+      let totaleAnno = 0;
+      nomiMesi.forEach((nomeMese, indice) => {
+        let meseNum = String(indice + 1).padStart(2, '0');
+        let chiaveMese = `${annoSelezionato}-${meseNum}`;
+        let speseMese = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(chiaveMese));
+        let totaleMese = speseMese.reduce((somma, s) => somma + parseFloat(s.importo), 0);
+        totaleAnno += totaleMese;
+
+        const div = document.createElement('div');
+        div.className = 'mese-riga';
+        div.innerHTML = `<span>${nomeMese}</span> <strong>€ ${totaleMese.toFixed(2)}</strong>`;
+        listaMesi.appendChild(div);
+      });
+
+      totaleAnnoBox.textContent = `€ ${totaleAnno.toFixed(2)}`;
+    } catch (err) { console.error("Errore annuale:", err); }
+  }
+
+  function aggiungiPrestito(tipo) {
+    const nome = document.getElementById(`${tipo}-nome`).value;
+    const importo = document.getElementById(`${tipo}-importo`).value;
+    const nota = document.getElementById(`${tipo}-nota`).value;
+
+    if (nome === "" || importo === "") { alert("Inserisci nome e importo."); return; }
+
+    colUtente("prestiti").add({ nome, importo: parseFloat(importo), tipo, nota, createdAt: Date.now() })
+    .then(() => {
+      document.getElementById(`${tipo}-nome`).value = '';
+      document.getElementById(`${tipo}-importo`).value = '';
+      document.getElementById(`${tipo}-nota`).value = '';
+      setTimeout(() => { caricaPrestiti(); }, 500);
+    })
+    .catch((e) => { console.error("Errore prestito:", e); });
+  }
+
+  async function caricaPrestiti() {
+    const listaPrestato = document.getElementById('lista-prestato');
+    const listaRicevuto = document.getElementById('lista-ricevuto');
+    const bilancioBox = document.getElementById('totale-bilancio-prestiti');
+    if(!listaPrestato || !listaRicevuto || !auth.currentUser) return;
+    
+    listaPrestato.innerHTML = ''; listaRicevuto.innerHTML = '';
+
+    try {
+      const queryPrestiti = await colUtente("prestiti").get();
+      let prestitiSalvati = [];
+      queryPrestiti.forEach((docSnap) => { prestitiSalvati.push({ id: docSnap.id, ...docSnap.data() }); });
+
+      let totalePrestati = 0, totaleRicevuti = 0;
+      let prestatiItems = prestitiSalvati.filter(p => p.tipo === 'prestato');
+      let ricevutiItems = prestitiSalvati.filter(p => p.tipo === 'ricevuto');
+
+      prestatiItems.forEach(p => {
+        totalePrestati += p.importo;
+        const li = document.createElement('li');
+        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;
+        listaPrestato.appendChild(li);
+      });
+
+      ricevutiItems.forEach(p => {
+        totaleRicevuti += p.importo;
+        const li = document.createElement('li');
+        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;
+        listaRicevuto.appendChild(li);
+      });
+
+      let bilancioNetto = totalePrestati - totaleRicevuti;
+      if(bilancioBox) bilancioBox.textContent = `€ ${bilancioNetto.toFixed(2)}`;
+    } catch (err) { console.error("Errore prestiti:", err); }
+  }
+
+  function modificaImporto(id, importoAttuale) {
+    let nuovoImporto = prompt("Nuovo importo rimanente:", importoAttuale);
+    if (nuovoImporto !== null && !isNaN(nuogoImporto = nuovoImporto) && nuovoImporto.trim() !== "") {
+      colUtente("prestiti").doc(id).update({ importo: parseFloat(nuovoImporto) })
+      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
+      .catch((e) => { console.error("Errore modifica:", e); });
+    }
+  }
+
+  function eliminaSpesaHome(id) {
+    colUtente("spese").doc(id).delete()
+      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })
+      .catch((e) => { console.error("Errore eliminazione:", e); });
+  }
+
+  function eliminaEntrata(id) {
+    colUtente("entrate").doc(id).delete()
+      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })
+      .catch((e) => { console.error("Errore eliminazione:", e); });
+  }
+
+  function eliminaPrestito(id) {
+    colUtente("prestiti").doc(id).delete()
+      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
+      .catch((e) => { console.error("Errore eliminazione:", e); });
+  }
+</script>
+
+</body>
+</html>

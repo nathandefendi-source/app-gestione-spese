@@ -9,7 +9,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  
+
+  <!-- Libreria Tesseract.js per OCR scontrini -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
   <!-- Libreria per il Grafico a Torta -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -222,6 +224,12 @@
 
       <div class="card">
         <h3 class="card-title" style="color: var(--accent-blue);">Registra Spesa 💸</h3>
+<div class="card" style="border-left: 4px solid var(--accent-orange);">
+        <h3 class="card-title" style="color: var(--accent-orange);">Scansiona Scontrino 📸</h3>
+        <input type="file" id="file-scontrino" accept="image/*" capture="environment" style="font-size:12px; padding:8px;" />
+        <button style="background-color: var(--accent-orange);" onclick="leggiScontrino()">Estrai Importo da Scontrino</button>
+        <p id="ocr-status" class="subtitle" style="margin-top: 6px;"></p>
+      </div>
         <input type="number" id="importo" placeholder="Importo (€)" step="0.01" />
         <select id="categoria">
           <option value="Alimentari">Alimentari 🛒</option>
@@ -672,6 +680,46 @@
       .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
       .catch((e) => { console.error("Errore eliminazione:", e); });
   }
+async function leggiScontrino() {
+  const input = document.getElementById('file-scontrino');
+  const status = document.getElementById('ocr-status');
+  
+  if (input.files.length === 0) {
+    alert("Seleziona o scatta una foto dello scontrino.");
+    return;
+  }
+  
+  const file = input.files[0];
+  status.textContent = "Elaborazione OCR in corso... Attendere.";
+
+  try {
+    const result = await Tesseract.recognize(file, 'ita', {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          status.textContent = `Analisi: ${Math.round(m.progress * 100)}%`;
+        }
+      }
+    });
+
+    const testoRiconosciuto = result.data.text;
+    status.textContent = "Scansione completata!";
+    
+    const regexImporto = /(\d+[\.,]\d{2})/g;
+    const match = testoRiconosciuto.match(regexImporto);
+
+    if (match && match.length > 0) {
+      let importoTrovato = match[match.length - 1].replace(',', '.');
+      document.getElementById('importo').value = importoTrovato;
+      document.getElementById('nota').value = "Scontrino scansionato";
+      alert(`Trovato importo: €${importoTrovato}. Valore inserito nel modulo spesa!`);
+    } else {
+      alert("Impossibile rilevare un importo chiaro. Inseriscilo manualmente.");
+    }
+  } catch (err) {
+    console.error(err);
+    status.textContent = "Errore durante la lettura dello scontrino.";
+  }
+}
 </script>
 
 </body>

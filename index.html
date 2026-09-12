@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestione Spese Cloud</title>
-  <!-- Icona personalizzata per la schermata Home -->
-  <link rel="icon" type="image/png" href="icon.png">
-  <link rel="apple-touch-icon" href="icon.png?v=2">
+  <title>Gestione Spese Cloud[cite: 1]</title>
   
-  <!-- Librerie di Firebase (v8: App, Firestore, Auth) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <!-- Icona personalizzata aggiornata per iOS con parametro anti-cache -->
+  <link rel="icon" type="image/png" href="app-icon.png">[cite: 1]
+  <link rel="apple-touch-icon" sizes="180x180" href="app-icon.png?v=3">
+  
+  <!-- Librerie di Firebase (v8: App, Firestore, Auth) -->[cite: 1]
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>[cite: 1]
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>[cite: 1]
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>[cite: 1]
 
-  <!-- Libreria Tesseract.js per OCR scontrini -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
-  <!-- Libreria per il Grafico a Torta -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Libreria Tesseract.js per OCR scontrini -->[cite: 1]
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>[cite: 1]
+  <!-- Libreria per il Grafico a Torta -->[cite: 1]
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>[cite: 1]
 
   <style>
     :root {
@@ -165,560 +166,560 @@
   <!-- ================= VISTA LOGIN ================= -->
   <div id="vista-login" class="vista">
     <div style="text-align: center; margin: 40px 0 20px 0;">
-      <h1 style="font-size: 28px; margin-bottom: 8px;">Gestione Spese</h1>
-      <p class="subtitle">Accedi o registrati per gestire i tuoi dati in sicurezza</p>
+      <h1 style="font-size: 28px; margin-bottom: 8px;">Gestione Spese[cite: 1]</h1>
+      <p class="subtitle">Accedi o registrati per gestire i tuoi dati in sicurezza[cite: 1]</p>
     </div>
     <div class="card">
-      <input type="email" id="login-email" placeholder="La tua email" />
-      <input type="password" id="login-password" placeholder="Password (min 6 caratteri)" />
-      <button onclick="eseguiLogin()">Accedi</button>
-      <button onclick="eseguiRegistrazione()" style="background-color: var(--text-muted); margin-top: 6px;">Crea nuovo account</button>
+      <input type="email" id="login-email" placeholder="La tua email" />[cite: 1]
+      <input type="password" id="login-password" placeholder="Password (min 6 caratteri)" />[cite: 1]
+      <button onclick="eseguiLogin()">Accedi</button>[cite: 1]
+      <button onclick="eseguiRegistrazione()" style="background-color: var(--text-muted); margin-top: 6px;">Crea nuovo account</button>[cite: 1]
     </div>
   </div>
 
-  <!-- Contenitore Principale protetto da Login -->
-  <div id="contenuto-protetto" style="display: none;">
+  <!-- Contenitore Principale protetto da Login -->[cite: 1]
+  <div id="contenuto-protetto" style="display: none;">[cite: 1]
 
-    <!-- ================= VISTA 1: HOME ================= -->
-    <div id="vista-home" class="vista attiva">
-      <header class="user-header">
+    <!-- ================= VISTA 1: HOME ================= -->[cite: 1]
+    <div id="vista-home" class="vista attiva">[cite: 1]
+      <header class="user-header">[cite: 1]
         <div>
-          <h1>Dashboard</h1>
-          <p class="subtitle" id="email-utente-connesso"></p>
+          <h1>Dashboard</h1>[cite: 1]
+          <p class="subtitle" id="email-utente-connesso"></p>[cite: 1]
         </div>
-        <button class="btn-logout" onclick="eseguiLogout()">Esci</button>
+        <button class="btn-logout" onclick="eseguiLogout()">Esci</button>[cite: 1]
       </header>
 
-      <div class="saldo-card">
-        <span class="label-piccola">Saldo del Mese</span>
-        <h2 id="totale-mese">€ 0,00</h2>
-        <div class="trend-badge">Spese correnti del periodo</div>
+      <div class="saldo-card">[cite: 1]
+        <span class="label-piccola">Saldo del Mese</span>[cite: 1]
+        <h2 id="totale-mese">€ 0,00</h2>[cite: 1]
+        <div class="trend-badge">Spese correnti del periodo</div>[cite: 1]
       </div>
 
-      <div class="selettore-mese-card">
-        <span>Mese di riferimento:</span>
-        <input type="month" id="filtro-mese" onchange="caricaDatiHome()" />
+      <div class="selettore-mese-card">[cite: 1]
+        <span>Mese di riferimento:</span>[cite: 1]
+        <input type="month" id="filtro-mese" onchange="caricaDatiHome()" />[cite: 1]
       </div>
 
-      <div class="card">
-        <h3 class="card-title">Distribuzione Categorie</h3>
-        <div style="position: relative; height:180px; width:100%;">
-          <canvas id="graficoTorta"></canvas>
+      <div class="card">[cite: 1]
+        <h3 class="card-title">Distribuzione Categorie</h3>[cite: 1]
+        <div style="position: relative; height:180px; width:100%;">[cite: 1]
+          <canvas id="graficoTorta"></canvas>[cite: 1]
         </div>
       </div>
 
-      <div class="card">
-        <h3 class="card-title">Categorie del Mese</h3>
-        <div id="griglia-categorie"></div>
+      <div class="card">[cite: 1]
+        <h3 class="card-title">Categorie del Mese</h3>[cite: 1]
+        <div id="griglia-categorie"></div>[cite: 1]
       </div>
 
-      <div class="card">
-        <h3 class="card-title">Storico Spese</h3>
-        <ul id="lista-spese-home"></ul>
+      <div class="card">[cite: 1]
+        <h3 class="card-title">Storico Spese</h3>[cite: 1]
+        <ul id="lista-spese-home"></ul>[cite: 1]
       </div>
     </div>
 
-    <!-- ================= VISTA 2: OPERAZIONI ================= -->
-    <div id="vista-operazioni" class="vista">
-      <header class="user-header">
-        <h1>Nuova Transazione</h1>
-        <p class="subtitle">Registra entrate o uscite</p>
+    <!-- ================= VISTA 2: OPERAZIONI ================= -->[cite: 1]
+    <div id="vista-operazioni" class="vista">[cite: 1]
+      <header class="user-header">[cite: 1]
+        <h1>Nuova Transazione</h1>[cite: 1]
+        <p class="subtitle">Registra entrate o uscite</p>[cite: 1]
       </header>
 
-      <div class="card">
-        <h3 class="card-title" style="color: var(--accent-blue);">Registra Spesa 💸</h3>
-        <div class="card" style="border-left: 4px solid var(--accent-orange);">
-          <h3 class="card-title" style="color: var(--accent-orange);">Scansiona Scontrino 📸</h3>
-          <input type="file" id="file-scontrino" accept="image/*" capture="environment" style="font-size:12px; padding:8px;" />
-          <button style="background-color: var(--accent-orange);" onclick="leggiScontrino()">Estrai Importo da Scontrino</button>
-          <p id="ocr-status" class="subtitle" style="margin-top: 6px;"></p>
+      <div class="card">[cite: 1]
+        <h3 class="card-title" style="color: var(--accent-blue);">Registra Spesa 💸</h3>[cite: 1]
+        <div class="card" style="border-left: 4px solid var(--accent-orange);">[cite: 1]
+          <h3 class="card-title" style="color: var(--accent-orange);">Scansiona Scontrino 📸</h3>[cite: 1]
+          <input type="file" id="file-scontrino" accept="image/*" capture="environment" style="font-size:12px; padding:8px;" />[cite: 1]
+          <button style="background-color: var(--accent-orange);" onclick="leggiScontrino()">Estrai Importo da Scontrino</button>[cite: 1]
+          <p id="ocr-status" class="subtitle" style="margin-top: 6px;"></p>[cite: 1]
         </div>
-        <input type="number" id="importo" placeholder="Importo (€)" step="0.01" />
-        <select id="categoria">
-          <option value="Alimentari">Alimentari 🛒</option>
-          <option value="Mediche">Mediche 💊</option>
-          <option value="Vestiario">Vestiario 👕</option>
-          <option value="Personali">Personali 🎮</option>
-          <option value="Investimenti">Investimenti 📈</option>
-          <option value="Trasporti">Trasporti 🚌</option>
-          <option value="Spese Universitarie">Spese Universitarie 📚</option>
+        <input type="number" id="importo" placeholder="Importo (€)" step="0.01" />[cite: 1]
+        <select id="categoria">[cite: 1]
+          <option value="Alimentari">Alimentari 🛒</option>[cite: 1]
+          <option value="Mediche">Mediche 💊</option>[cite: 1]
+          <option value="Vestiario">Vestiario 👕</option>[cite: 1]
+          <option value="Personali">Personali 🎮</option>[cite: 1]
+          <option value="Investimenti">Investimenti 📈</option>[cite: 1]
+          <option value="Trasporti">Trasporti 🚌</option>[cite: 1]
+          <option value="Spese Universitarie">Spese Universitarie 📚</option>[cite: 1]
         </select>
-        <input type="date" id="data" />
-        <input type="text" id="nota" placeholder="Nota (es. Supermercato)" />
-        <button onclick="aggiungiSpesa()">Salva Spesa</button>
+        <input type="date" id="data" />[cite: 1]
+        <input type="text" id="nota" placeholder="Nota (es. Supermercato)" />[cite: 1]
+        <button onclick="aggiungiSpesa()">Salva Spesa</button>[cite: 1]
       </div>
 
-      <div class="card">
-        <h3 class="card-title" style="color: var(--accent-green);">Registra Entrata 💰</h3>
-        <input type="number" id="importo-entrata" placeholder="Importo (€)" step="0.01" />
-        <input type="date" id="data-entrata" />
-        <input type="text" id="descrizione-entrata" placeholder="Descrizione (es. Stipendio)" />
-        <button style="background-color: var(--accent-green);" onclick="aggiungiEntrata()">Salva Entrata</button>
+      <div class="card">[cite: 1]
+        <h3 class="card-title" style="color: var(--accent-green);">Registra Entrata 💰</h3>[cite: 1]
+        <input type="number" id="importo-entrata" placeholder="Importo (€)" step="0.01" />[cite: 1]
+        <input type="date" id="data-entrata" />[cite: 1]
+        <input type="text" id="descrizione-entrata" placeholder="Descrizione (es. Stipendio)" />[cite: 1]
+        <button style="background-color: var(--accent-green);" onclick="aggiungiEntrata()">Salva Entrata</button>[cite: 1]
       </div>
 
-      <div class="card">
-        <h3 class="card-title">Storico Entrate del Mese</h3>
-        <ul id="lista-entrate-home"></ul>
+      <div class="card">[cite: 1]
+        <h3 class="card-title">Storico Entrate del Mese</h3>[cite: 1]
+        <ul id="lista-entrate-home"></ul>[cite: 1]
       </div>
     </div>
 
-    <!-- ================= VISTA 3: PRESTITI ================= -->
-    <div id="vista-prestiti" class="vista">
-      <header class="user-header">
-        <h1>Rubrica Prestiti</h1>
-        <p class="subtitle">Gestisci crediti e debiti</p>
+    <!-- ================= VISTA 3: PRESTITI ================= -->[cite: 1]
+    <div id="vista-prestiti" class="vista">[cite: 1]
+      <header class="user-header">[cite: 1]
+        <h1>Rubrica Prestiti</h1>[cite: 1]
+        <p class="subtitle">Gestisci crediti e debiti</p>[cite: 1]
       </header>
 
-      <div class="saldo-card" style="border-left: 4px solid var(--accent-orange);">
-        <span class="label-piccola">Bilancio Netto Prestiti</span>
-        <h2 id="totale-bilancio-prestiti" style="color: var(--accent-orange);">€ 0,00</h2>
+      <div class="saldo-card" style="border-left: 4px solid var(--accent-orange);">[cite: 1]
+        <span class="label-piccola">Bilancio Netto Prestiti</span>[cite: 1]
+        <h2 id="totale-bilancio-prestiti" style="color: var(--accent-orange);">€ 0,00</h2>[cite: 1]
       </div>
 
-      <div class="prestiti-layout">
-        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-green);">
-          <h3 style="color: var(--accent-green); font-size:13px; margin-top:0;">Prestati ↗</h3>
-          <input type="text" id="prestato-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />
-          <input type="number" id="prestato-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />
-          <input type="text" id="prestato-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />
-          <button style="background-color: var(--accent-green); padding:8px; font-size:13px;" onclick="aggiungiPrestito('prestato')">Aggiungi</button>
-          <ul id="lista-prestato" style="margin-top:10px;"></ul>
+      <div class="prestiti-layout">[cite: 1]
+        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-green);">[cite: 1]
+          <h3 style="color: var(--accent-green); font-size:13px; margin-top:0;">Prestati ↗</h3>[cite: 1]
+          <input type="text" id="prestato-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />[cite: 1]
+          <input type="number" id="prestato-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />[cite: 1]
+          <input type="text" id="prestato-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />[cite: 1]
+          <button style="background-color: var(--accent-green); padding:8px; font-size:13px;" onclick="aggiungiPrestito('prestato')">Aggiungi</button>[cite: 1]
+          <ul id="lista-prestato" style="margin-top:10px;"></ul>[cite: 1]
         </div>
 
-        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-red);">
-          <h3 style="color: var(--accent-red); font-size:13px; margin-top:0;">Ricevuti ↙</h3>
-          <input type="text" id="ricevuto-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />
-          <input type="number" id="ricevuto-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />
-          <input type="text" id="ricevuto-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />
-          <button style="background-color: var(--accent-red); padding:8px; font-size:13px;" onclick="aggiungiPrestito('ricevuto')">Aggiungi</button>
-          <ul id="lista-ricevuto" style="margin-top:10px;"></ul>
+        <div class="colonna-prestiti" style="border-top: 4px solid var(--accent-red);">[cite: 1]
+          <h3 style="color: var(--accent-red); font-size:13px; margin-top:0;">Ricevuti ↙</h3>[cite: 1]
+          <input type="text" id="ricevuto-nome" placeholder="Nome" style="font-size:13px; padding:8px;" />[cite: 1]
+          <input type="number" id="ricevuto-importo" placeholder="€" step="0.01" style="font-size:13px; padding:8px;" />[cite: 1]
+          <input type="text" id="ricevuto-nota" placeholder="Nota" style="font-size:13px; padding:8px;" />[cite: 1]
+          <button style="background-color: var(--accent-red); padding:8px; font-size:13px;" onclick="aggiungiPrestito('ricevuto')">Aggiungi</button>[cite: 1]
+          <ul id="lista-ricevuto" style="margin-top:10px;"></ul>[cite: 1]
         </div>
       </div>
     </div>
 
-    <!-- ================= VISTA 4: RESOCONTO ANNUALE ================= -->
-    <div id="vista-annuale" class="vista">
-      <header class="user-header">
-        <h1>Resoconto Annuale</h1>
-        <p class="subtitle">Andamento spesa sui 12 mesi</p>
+    <!-- ================= VISTA 4: RESOCONTO ANNUALE ================= -->[cite: 1]
+    <div id="vista-annuale" class="vista">[cite: 1]
+      <header class="user-header">[cite: 1]
+        <h1>Resoconto Annuale</h1>[cite: 1]
+        <p class="subtitle">Andamento spesa sui 12 mesi</p>[cite: 1]
       </header>
 
-      <div class="selettore-mese-card">
-        <span>Anno di riferimento:</span>
-        <input type="number" id="filtro-anno" value="2026" onchange="caricaDatiAnnuale()" style="width: 80px;" />
+      <div class="selettore-mese-card">[cite: 1]
+        <span>Anno di riferimento:</span>[cite: 1]
+        <input type="number" id="filtro-anno" value="2026" onchange="caricaDatiAnnuale()" style="width: 80px;" />[cite: 1]
       </div>
 
-      <div class="saldo-card">
-        <span class="label-piccola">Totale Speso nell'Anno</span>
-        <h2 id="totale-anno">€ 0,00</h2>
+      <div class="saldo-card">[cite: 1]
+        <span class="label-piccola">Totale Speso nell'Anno</span>[cite: 1]
+        <h2 id="totale-anno">€ 0,00</h2>[cite: 1]
       </div>
 
-      <div class="card">
-        <h3 class="card-title">Dettaglio Mensile</h3>
-        <div id="lista-mesi-anno"></div>
+      <div class="card">[cite: 1]
+        <h3 class="card-title">Dettaglio Mensile</h3>[cite: 1]
+        <div id="lista-mesi-anno"></div>[cite: 1]
       </div>
     </div>
 
-    <!-- ================= BARRA DI NAVIGAZIONE ================= -->
-    <nav class="bottom-nav">
-      <button class="nav-item attiva" onclick="cambiaTab('vista-home', this)">
-        <span class="nav-icon">🏠</span>
-        <span>Home</span>
+    <!-- ================= BARRA DI NAVIGAZIONE ================= -->[cite: 1]
+    <nav class="bottom-nav">[cite: 1]
+      <button class="nav-item attiva" onclick="cambiaTab('vista-home', this)">[cite: 1]
+        <span class="nav-icon">🏠</span>[cite: 1]
+        <span>Home</span>[cite: 1]
       </button>
-      <button class="nav-item" onclick="cambiaTab('vista-operazioni', this)">
-        <span class="nav-icon">➕</span>
-        <span>Operazioni</span>
+      <button class="nav-item" onclick="cambiaTab('vista-operazioni', this)">[cite: 1]
+        <span class="nav-icon">➕</span>[cite: 1]
+        <span>Operazioni</span>[cite: 1]
       </button>
-      <button class="nav-item" onclick="cambiaTab('vista-prestiti', this)">
-        <span class="nav-icon">🤝</span>
-        <span>Prestiti</span>
+      <button class="nav-item" onclick="cambiaTab('vista-prestiti', this)">[cite: 1]
+        <span class="nav-icon">🤝</span>[cite: 1]
+        <span>Prestiti</span>[cite: 1]
       </button>
-      <button class="nav-item" onclick="cambiaTab('vista-annuale', this)">
-        <span class="nav-icon">📊</span>
-        <span>Annuale</span>
+      <button class="nav-item" onclick="cambiaTab('vista-annuale', this)">[cite: 1]
+        <span class="nav-icon">📊</span>[cite: 1]
+        <span>Annuale</span>[cite: 1]
       </button>
     </nav>
 
-  </div> <!-- Fine Contenuto Protetto -->
+  </div> <!-- Fine Contenuto Protetto -->[cite: 1]
 
 </div>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBiGs8RZGqLKN-b2cBzqFhm7J-bsJ39wO4",
-    authDomain: "applicazione-gestione-spese.firebaseapp.com",
-    projectId: "applicazione-gestione-spese",
-    storageBucket: "applicazione-gestione-spese.firebasestorage.app",
-    messagingSenderId: "333542998875",
-    appId: "1:333542998875:web:08452c5e565ab8ae00d07e",
-    measurementId: "G-72CHEXLX1L"
+  const firebaseConfig = {[cite: 1]
+    apiKey: "AIzaSyBiGs8RZGqLKN-b2cBzqFhm7J-bsJ39wO4",[cite: 1]
+    authDomain: "applicazione-gestione-spese.firebaseapp.com",[cite: 1]
+    projectId: "applicazione-gestione-spese",[cite: 1]
+    storageBucket: "applicazione-gestione-spese.firebasestorage.app",[cite: 1]
+    messagingSenderId: "333542998875",[cite: 1]
+    appId: "1:333542998875:web:08452c5e565ab8ae00d07e",[cite: 1]
+    measurementId: "G-72CHEXLX1L"[cite: 1]
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
+  firebase.initializeApp(firebaseConfig);[cite: 1]
+  const db = firebase.firestore();[cite: 1]
+  const auth = firebase.auth();[cite: 1]
 
-  const elencoCategorie = [
-    { id: "Alimentari", nome: "Alimentari 🛒", colore: "#007aff" },
-    { id: "Mediche", nome: "Mediche 💊", colore: "#ff3b30" },
-    { id: "Vestiario", nome: "Vestiario 👕", colore: "#af52de" },
-    { id: "Personali", nome: "Personali 🎮", colore: "#ff9500" },
-    { id: "Investimenti", nome: "Investimenti 📈", colore: "#34c759" },
-    { id: "Trasporti", nome: "Trasporti 🚌", colore: "#5856d6" },
-    { id: "Spese Universitarie", nome: "Spese Universitarie 📚", colore: "#ffcc00" }
+  const elencoCategorie = [[cite: 1]
+    { id: "Alimentari", nome: "Alimentari 🛒", colore: "#007aff" },[cite: 1]
+    { id: "Mediche", nome: "Mediche 💊", colore: "#ff3b30" },[cite: 1]
+    { id: "Vestiario", nome: "Vestiario 👕", colore: "#af52de" },[cite: 1]
+    { id: "Personali", nome: "Personali 🎮", colore: "#ff9500" },[cite: 1]
+    { id: "Investimenti", nome: "Investimenti 📈", colore: "#34c759" },[cite: 1]
+    { id: "Trasporti", nome: "Trasporti 🚌", colore: "#5856d6" },[cite: 1]
+    { id: "Spese Universitarie", nome: "Spese Universitarie 📚", colore: "#ffcc00" }[cite: 1]
   ];
 
-  const nomiMesi = [
-    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+  const nomiMesi = [[cite: 1]
+    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",[cite: 1]
+    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"[cite: 1]
   ];
 
-  let mioGrafico = null;
+  let mioGrafico = null;[cite: 1]
 
-  // Controllo dello stato di autenticazione in tempo reale
-  auth.onAuthStateChanged((user) => {
+  // Controllo dello stato di autenticazione in tempo reale[cite: 1]
+  auth.onAuthStateChanged((user) => {[cite: 1]
     if (user) {
-      document.getElementById('vista-login').classList.remove('attiva');
-      document.getElementById('contenuto-protetto').style.display = 'block';
-      document.getElementById('email-utente-connesso').textContent = user.email;
+      document.getElementById('vista-login').classList.remove('attiva');[cite: 1]
+      document.getElementById('contenuto-protetto').style.display = 'block';[cite: 1]
+      document.getElementById('email-utente-connesso').textContent = user.email;[cite: 1]
 
-      const oggi = new Date();
-      if(document.getElementById('data')) document.getElementById('data').valueAsDate = oggi;
-      if(document.getElementById('data-entrata')) document.getElementById('data-entrata').valueAsDate = oggi;
+      const oggi = new Date();[cite: 1]
+      if(document.getElementById('data')) document.getElementById('data').valueAsDate = oggi;[cite: 1]
+      if(document.getElementById('data-entrata')) document.getElementById('data-entrata').valueAsDate = oggi;[cite: 1]
       
-      const anno = oggi.getFullYear();
-      const mese = String(oggi.getMonth() + 1).padStart(2, '0');
-      if(document.getElementById('filtro-mese')) document.getElementById('filtro-mese').value = `${anno}-${mese}`;
-      if(document.getElementById('filtro-anno')) document.getElementById('filtro-anno').value = anno;
+      const anno = oggi.getFullYear();[cite: 1]
+      const mese = String(oggi.getMonth() + 1).padStart(2, '0');[cite: 1]
+      if(document.getElementById('filtro-mese')) document.getElementById('filtro-mese').value = `${anno}-${mese}`;[cite: 1]
+      if(document.getElementById('filtro-anno')) document.getElementById('filtro-anno').value = anno;[cite: 1]
 
-      caricaDatiHome();
+      caricaDatiHome();[cite: 1]
     } else {
-      document.getElementById('contenuto-protetto').style.display = 'none';
-      document.getElementById('vista-login').classList.add('attiva');
+      document.getElementById('contenuto-protetto').style.display = 'none';[cite: 1]
+      document.getElementById('vista-login').classList.add('attiva');[cite: 1]
     }
   });
 
-  function eseguiRegistrazione() {
-    const email = document.getElementById('login-email').value;
-    const pass = document.getElementById('login-password').value;
-    if(!email || !pass) { alert("Inserisci email e password"); return; }
+  function eseguiRegistrazione() {[cite: 1]
+    const email = document.getElementById('login-email').value;[cite: 1]
+    const pass = document.getElementById('login-password').value;[cite: 1]
+    if(!email || !pass) { alert("Inserisci email e password"); return; }[cite: 1]
     
-    auth.createUserWithEmailAndPassword(email, pass)
-      .then(() => { alert("Account creato con successo!"); })
-      .catch((error) => { alert("Errore: " + error.message); });
+    auth.createUserWithEmailAndPassword(email, pass)[cite: 1]
+      .then(() => { alert("Account creato con successo!"); })[cite: 1]
+      .catch((error) => { alert("Errore: " + error.message); });[cite: 1]
   }
 
-  function eseguiLogin() {
-    const email = document.getElementById('login-email').value;
-    const pass = document.getElementById('login-password').value;
-    if(!email || !pass) { alert("Inserisci email e password"); return; }
+  function eseguiLogin() {[cite: 1]
+    const email = document.getElementById('login-email').value;[cite: 1]
+    const pass = document.getElementById('login-password').value;[cite: 1]
+    if(!email || !pass) { alert("Inserisci email e password"); return; }[cite: 1]
 
-    auth.signInWithEmailAndPassword(email, pass)
-      .catch((error) => { alert("Credenziali non valide: " + error.message); });
+    auth.signInWithEmailAndPassword(email, pass)[cite: 1]
+      .catch((error) => { alert("Credenziali non valide: " + error.message); });[cite: 1]
   }
 
-  function eseguiLogout() {
-    auth.signOut();
+  function eseguiLogout() {[cite: 1]
+    auth.signOut();[cite: 1]
   }
 
-  function cambiaTab(idVista, elementoBottone) {
-    document.querySelectorAll('.vista').forEach(v => v.classList.remove('attiva'));
-    document.getElementById(idVista).classList.add('attiva');
+  function cambiaTab(idVista, elementoBottone) {[cite: 1]
+    document.querySelectorAll('.vista').forEach(v => v.classList.remove('attiva'));[cite: 1]
+    document.getElementById(idVista).classList.add('attiva');[cite: 1]
 
-    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('attiva'));
-    elementoBottone.classList.add('attiva');
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('attiva'));[cite: 1]
+    elementoBottone.classList.add('attiva');[cite: 1]
 
-    if(idVista === 'vista-annuale') caricaDatiAnnuale();
-    if(idVista === 'vista-prestiti') caricaPrestiti();
+    if(idVista === 'vista-annuale') caricaDatiAnnuale();[cite: 1]
+    if(idVista === 'vista-prestiti') caricaPrestiti();[cite: 1]
   }
 
-  function colUtente(nomeCollezione) {
-    const uid = auth.currentUser.uid;
-    return db.collection("users").doc(uid).collection(nomeCollezione);
+  function colUtente(nomeCollezione) {[cite: 1]
+    const uid = auth.currentUser.uid;[cite: 1]
+    return db.collection("users").doc(uid).collection(nomeCollezione);[cite: 1]
   }
 
-  function aggiungiSpesa() {
-    const importo = document.getElementById('importo').value;
-    const categoria = document.getElementById('categoria').value;
-    const data = document.getElementById('data').value;
-    const nota = document.getElementById('nota').value;
+  function aggiungiSpesa() {[cite: 1]
+    const importo = document.getElementById('importo').value;[cite: 1]
+    const categoria = document.getElementById('categoria').value;[cite: 1]
+    const data = document.getElementById('data').value;[cite: 1]
+    const nota = document.getElementById('nota').value;[cite: 1]
 
-    if (importo === "") { alert("Inserisci un importo valido."); return; }
+    if (importo === "") { alert("Inserisci un importo valido."); return; }[cite: 1]
 
-    colUtente("spese").add({
-      importo: parseFloat(importo), categoria, data, nota, createdAt: Date.now()
+    colUtente("spese").add({[cite: 1]
+      importo: parseFloat(importo), categoria, data, nota, createdAt: Date.now()[cite: 1]
     })
     .then(() => {
-      document.getElementById('importo').value = '';
-      document.getElementById('nota').value = '';
-      alert("Spesa registrata nel cloud!");
-      setTimeout(() => { caricaDatiHome(); }, 500);
+      document.getElementById('importo').value = '';[cite: 1]
+      document.getElementById('nota').value = '';[cite: 1]
+      alert("Spesa registrata nel cloud!");[cite: 1]
+      setTimeout(() => { caricaDatiHome(); }, 500);[cite: 1]
     })
-    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });
+    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });[cite: 1]
   }
 
-  function aggiungiEntrata() {
-    const importo = document.getElementById('importo-entrata').value;
-    const data = document.getElementById('data-entrata').value;
-    const descrizione = document.getElementById('descrizione-entrata').value;
+  function aggiungiEntrata() {[cite: 1]
+    const importo = document.getElementById('importo-entrata').value;[cite: 1]
+    const data = document.getElementById('data-entrata').value;[cite: 1]
+    const descrizione = document.getElementById('descrizione-entrata').value;[cite: 1]
 
-    if (importo === "") { alert("Inserisci un importo valido."); return; }
+    if (importo === "") { alert("Inserisci un importo valido."); return; }[cite: 1]
 
-    colUtente("entrate").add({
-      importo: parseFloat(importo), data, descrizione, createdAt: Date.now()
+    colUtente("entrate").add({[cite: 1]
+      importo: parseFloat(importo), data, descrizione, createdAt: Date.now()[cite: 1]
     })
     .then(() => {
-      document.getElementById('importo-entrata').value = '';
-      document.getElementById('descrizione-entrata').value = '';
-      alert("Entrata registrata nel cloud!");
-      setTimeout(() => { caricaDatiHome(); }, 500);
+      document.getElementById('importo-entrata').value = '';[cite: 1]
+      document.getElementById('descrizione-entrata').value = '';[cite: 1]
+      alert("Entrata registrata nel cloud!");[cite: 1]
+      setTimeout(() => { caricaDatiHome(); }, 500);[cite: 1]
     })
-    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });
+    .catch((e) => { console.error("Errore:", e); alert("Errore durante il salvataggio."); });[cite: 1]
   }
 
-  async function caricaDatiHome() {
-    const grigliaCat = document.getElementById('griglia-categorie');
-    const listaHome = document.getElementById('lista-spese-home');
-    const listaEntrateHome = document.getElementById('lista-entrate-home');
-    const totaleBox = document.getElementById('totale-mese');
-    const filtroMeseEl = document.getElementById('filtro-mese');
+  async function caricaDatiHome() {[cite: 1]
+    const grigliaCat = document.getElementById('griglia-categorie');[cite: 1]
+    const listaHome = document.getElementById('lista-spese-home');[cite: 1]
+    const listaEntrateHome = document.getElementById('lista-entrate-home');[cite: 1]
+    const totaleBox = document.getElementById('totale-mese');[cite: 1]
+    const filtroMeseEl = document.getElementById('filtro-mese');[cite: 1]
     
-    if (!filtroMeseEl || !auth.currentUser) return;
-    const meseSelezionato = filtroMeseEl.value;
+    if (!filtroMeseEl || !auth.currentUser) return;[cite: 1]
+    const meseSelezionato = filtroMeseEl.value;[cite: 1]
     
-    if(grigliaCat) grigliaCat.innerHTML = '';
-    if(listaHome) listaHome.innerHTML = '';
-    if(listaEntrateHome) listaEntrateHome.innerHTML = '';
+    if(grigliaCat) grigliaCat.innerHTML = '';[cite: 1]
+    if(listaHome) listaHome.innerHTML = '';[cite: 1]
+    if(listaEntrateHome) listaEntrateHome.innerHTML = '';[cite: 1]
 
     try {
-      const querySpese = await colUtente("spese").get();
-      let speseSalvate = [];
-      querySpese.forEach((docSnap) => { speseSalvate.push({ id: docSnap.id, ...docSnap.data() }); });
+      const querySpese = await colUtente("spese").get();[cite: 1]
+      let speseSalvate = [];[cite: 1]
+      querySpese.forEach((docSnap) => { speseSalvate.push({ id: docSnap.id, ...docSnap.data() }); });[cite: 1]
 
-      const queryEntrate = await colUtente("entrate").get();
-      let entrateSalvate = [];
-      queryEntrate.forEach((docSnap) => { entrateSalvate.push({ id: docSnap.id, ...docSnap.data() }); });
+      const queryEntrate = await colUtente("entrate").get();[cite: 1]
+      let entrateSalvate = [];[cite: 1]
+      queryEntrate.forEach((docSnap) => { entrateSalvate.push({ id: docSnap.id, ...docSnap.data() }); });[cite: 1]
 
-      let speseFiltrate = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(meseSelezionato));
-      let entrateFiltrate = entrateSalvate.filter(e => e.data && e.data.startsWith(meseSelezionato));
+      let speseFiltrate = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(meseSelezionato));[cite: 1]
+      let entrateFiltrate = entrateSalvate.filter(e => e.data && e.data.startsWith(meseSelezionato));[cite: 1]
 
-      let totaleGeneraleMese = 0;
-      let valoriCat = [];
+      let totaleGeneraleMese = 0;[cite: 1]
+      let valoriCat = [];[cite: 1]
 
       elencoCategorie.forEach(cat => {
-        let speseCat = speseFiltrate.filter(s => s.categoria === cat.id);
-        let totaleCat = speseCat.reduce((somma, s) => somma + parseFloat(s.importo), 0);
-        totaleGeneraleMese += totaleCat;
-        valoriCat.push(totaleCat);
+        let speseCat = speseFiltrate.filter(s => s.categoria === cat.id);[cite: 1]
+        let totaleCat = speseCat.reduce((somma, s) => somma + parseFloat(s.importo), 0);[cite: 1]
+        totaleGeneraleMese += totaleCat;[cite: 1]
+        valoriCat.push(totaleCat);[cite: 1]
 
         if(grigliaCat) {
-          const div = document.createElement('div');
-          div.className = 'categoria-card';
-          div.style.borderLeftColor = cat.colore;
-          div.innerHTML = `<span>${cat.nome}</span><strong style="color: ${cat.colore}">€${totaleCat.toFixed(2)}</strong>`;
-          grigliaCat.appendChild(div);
+          const div = document.createElement('div');[cite: 1]
+          div.className = 'categoria-card';[cite: 1]
+          div.style.borderLeftColor = cat.colore;[cite: 1]
+          div.innerHTML = `<span>${cat.nome}</span><strong style="color: ${cat.colore}">€${totaleCat.toFixed(2)}</strong>`;[cite: 1]
+          grigliaCat.appendChild(div);[cite: 1]
         }
       });
 
-      if(totaleBox) totaleBox.textContent = `€ ${totaleGeneraleMese.toFixed(2)}`;
+      if(totaleBox) totaleBox.textContent = `€ ${totaleGeneraleMese.toFixed(2)}`;[cite: 1]
 
-      try { aggiornaGrafico(valoriCat); } catch (errGrafico) { console.log("Grafico non caricato:", errGrafico); }
+      try { aggiornaGrafico(valoriCat); } catch (errGrafico) { console.log("Grafico non caricato:", errGrafico); }[cite: 1]
 
       if(listaHome) {
         if (speseFiltrate.length === 0) {
-          listaHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna spesa nel periodo</li>`;
+          listaHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna spesa nel periodo</li>`;[cite: 1]
         } else {
-          speseFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          speseFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));[cite: 1]
           speseFiltrate.slice().reverse().forEach(spesa => {
-            let val = parseFloat(spesa.importo);
-            const li = document.createElement('li');
-            li.innerHTML = `<div><strong>${spesa.categoria}</strong><br><span style="font-size:11px; color:var(--text-muted);">${spesa.data} • ${spesa.nota || 'Nessuna nota'}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong>€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaSpesaHome('${spesa.id}')">X</button></div>`;
-            listaHome.appendChild(li);
+            let val = parseFloat(spesa.importo);[cite: 1]
+            const li = document.createElement('li');[cite: 1]
+            li.innerHTML = `<div><strong>${spesa.categoria}</strong><br><span style="font-size:11px; color:var(--text-muted);">${spesa.data} • ${spesa.nota || 'Nessuna nota'}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong>€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaSpesaHome('${spesa.id}')">X</button></div>`;[cite: 1]
+            listaHome.appendChild(li);[cite: 1]
           });
         }
       }
 
       if(listaEntrateHome) {
         if (entrateFiltrate.length === 0) {
-          listaEntrateHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna entrata nel periodo</li>`;
+          listaEntrateHome.innerHTML = `<li style="justify-content: center; color: var(--text-muted); background:transparent;">Nessuna entrata nel periodo</li>`;[cite: 1]
         } else {
-          entrateFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          entrateFiltrate.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));[cite: 1]
           entrateFiltrate.slice().reverse().forEach(ent => {
-            let val = parseFloat(ent.importo);
-            const li = document.createElement('li');
-            li.innerHTML = `<div><strong style="color:var(--accent-green);">Entrata</strong><br><span style="font-size:11px; color:var(--text-muted);">${ent.data} • ${ent.descrizione || ''}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong style="color:var(--accent-green);">+€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaEntrata('${ent.id}')">X</button></div>`;
-            listaEntrateHome.appendChild(li);
+            let val = parseFloat(ent.importo);[cite: 1]
+            const li = document.createElement('li');[cite: 1]
+            li.innerHTML = `<div><strong style="color:var(--accent-green);">Entrata</strong><br><span style="font-size:11px; color:var(--text-muted);">${ent.data} • ${ent.descrizione || ''}</span></div><div style="display: flex; align-items: center; gap: 8px;"><strong style="color:var(--accent-green);">+€${val.toFixed(2)}</strong><button class="btn-elimina" onclick="eliminaEntrata('${ent.id}')">X</button></div>`;[cite: 1]
+            listaEntrateHome.appendChild(li);[cite: 1]
           });
         }
       }
-    } catch (err) { console.error("Errore caricamento:", err); }
+    } catch (err) { console.error("Errore caricamento:", err); }[cite: 1]
   }
 
-  function aggiornaGrafico(dati) {
-    const canvasEl = document.getElementById('graficoTorta');
-    if (!canvasEl) return;
-    const ctx = canvasEl.getContext('2d');
-    if (mioGrafico) mioGrafico.destroy();
+  function aggiornaGrafico(dati) {[cite: 1]
+    const canvasEl = document.getElementById('graficoTorta');[cite: 1]
+    if (!canvasEl) return;[cite: 1]
+    const ctx = canvasEl.getContext('2d');[cite: 1]
+    if (mioGrafico) mioGrafico.destroy();[cite: 1]
 
-    mioGrafico = new Chart(ctx, {
-      type: 'doughnut',
+    mioGrafico = new Chart(ctx, {[cite: 1]
+      type: 'doughnut',[cite: 1]
       data: {
-        labels: elencoCategorie.map(c => c.id),
-        datasets: [{ data: dati, backgroundColor: elencoCategorie.map(c => c.colore), borderWidth: 2, borderColor: '#ffffff' }]
+        labels: elencoCategorie.map(c => c.id),[cite: 1]
+        datasets: [{ data: dati, backgroundColor: elencoCategorie.map(c => c.colore), borderWidth: 2, borderColor: '#ffffff' }][cite: 1]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } } }
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } } }[cite: 1]
     });
   }
 
-  async function caricaDatiAnnuale() {
-    const listaMesi = document.getElementById('lista-mesi-anno');
-    const totaleAnnoBox = document.getElementById('totale-anno');
-    const annoEl = document.getElementById('filtro-anno');
-    if(!listaMesi || !annoEl || !auth.currentUser) return;
+  async function caricaDatiAnnuale() {[cite: 1]
+    const listaMesi = document.getElementById('lista-mesi-anno');[cite: 1]
+    const totaleAnnoBox = document.getElementById('totale-anno');[cite: 1]
+    const annoEl = document.getElementById('filtro-anno');[cite: 1]
+    if(!listaMesi || !annoEl || !auth.currentUser) return;[cite: 1]
 
-    const annoSelezionato = annoEl.value;
-    listaMesi.innerHTML = '';
+    const annoSelezionato = annoEl.value;[cite: 1]
+    listaMesi.innerHTML = '';[cite: 1]
 
     try {
-      const querySpese = await colUtente("spese").get();
-      let speseSalvate = [];
-      querySpese.forEach((docSnap) => { speseSalvate.push(docSnap.data()); });
+      const querySpese = await colUtente("spese").get();[cite: 1]
+      let speseSalvate = [];[cite: 1]
+      querySpese.forEach((docSnap) => { speseSalvate.push(docSnap.data()); });[cite: 1]
 
-      let totaleAnno = 0;
+      let totaleAnno = 0;[cite: 1]
       nomiMesi.forEach((nomeMese, indice) => {
-        let meseNum = String(indice + 1).padStart(2, '0');
-        let chiaveMese = `${annoSelezionato}-${meseNum}`;
-        let speseMese = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(chiaveMese));
-        let totaleMese = speseMese.reduce((somma, s) => somma + parseFloat(s.importo), 0);
-        totaleAnno += totaleMese;
+        let meseNum = String(indice + 1).padStart(2, '0');[cite: 1]
+        let chiaveMese = `${annoSelezionato}-${meseNum}`;[cite: 1]
+        let speseMese = speseSalvate.filter(spesa => spesa.data && spesa.data.startsWith(chiaveMese));[cite: 1]
+        let totaleMese = speseMese.reduce((somma, s) => somma + parseFloat(s.importo), 0);[cite: 1]
+        totaleAnno += totaleMese;[cite: 1]
 
-        const div = document.createElement('div');
-        div.className = 'mese-riga';
-        div.innerHTML = `<span>${nomeMese}</span> <strong>€ ${totaleMese.toFixed(2)}</strong>`;
-        listaMesi.appendChild(div);
+        const div = document.createElement('div');[cite: 1]
+        div.className = 'mese-riga';[cite: 1]
+        div.innerHTML = `<span>${nomeMese}</span> <strong>€ ${totaleMese.toFixed(2)}</strong>`;[cite: 1]
+        listaMesi.appendChild(div);[cite: 1]
       });
 
-      totaleAnnoBox.textContent = `€ ${totaleAnno.toFixed(2)}`;
-    } catch (err) { console.error("Errore annuale:", err); }
+      totaleAnnoBox.textContent = `€ ${totaleAnno.toFixed(2)}`;[cite: 1]
+    } catch (err) { console.error("Errore annuale:", err); }[cite: 1]
   }
 
-  function aggiungiPrestito(tipo) {
-    const nome = document.getElementById(`${tipo}-nome`).value;
-    const importo = document.getElementById(`${tipo}-importo`).value;
-    const nota = document.getElementById(`${tipo}-nota`).value;
+  function aggiungiPrestito(tipo) {[cite: 1]
+    const nome = document.getElementById(`${tipo}-nome`).value;[cite: 1]
+    const importo = document.getElementById(`${tipo}-importo`).value;[cite: 1]
+    const nota = document.getElementById(`${tipo}-nota`).value;[cite: 1]
 
-    if (nome === "" || importo === "") { alert("Inserisci nome e importo."); return; }
+    if (nome === "" || importo === "") { alert("Inserisci nome e importo."); return; }[cite: 1]
 
-    colUtente("prestiti").add({ nome, importo: parseFloat(importo), tipo, nota, createdAt: Date.now() })
+    colUtente("prestiti").add({ nome, importo: parseFloat(importo), tipo, nota, createdAt: Date.now() })[cite: 1]
     .then(() => {
-      document.getElementById(`${tipo}-nome`).value = '';
-      document.getElementById(`${tipo}-importo`).value = '';
-      document.getElementById(`${tipo}-nota`).value = '';
-      setTimeout(() => { caricaPrestiti(); }, 500);
+      document.getElementById(`${tipo}-nome`).value = '';[cite: 1]
+      document.getElementById(`${tipo}-importo`).value = '';[cite: 1]
+      document.getElementById(`${tipo}-nota`).value = '';[cite: 1]
+      setTimeout(() => { caricaPrestiti(); }, 500);[cite: 1]
     })
-    .catch((e) => { console.error("Errore prestito:", e); });
+    .catch((e) => { console.error("Errore prestito:", e); });[cite: 1]
   }
 
-  async function caricaPrestiti() {
-    const listaPrestato = document.getElementById('lista-prestato');
-    const listaRicevuto = document.getElementById('lista-ricevuto');
-    const bilancioBox = document.getElementById('totale-bilancio-prestiti');
-    if(!listaPrestato || !listaRicevuto || !auth.currentUser) return;
+  async function caricaPrestiti() {[cite: 1]
+    const listaPrestato = document.getElementById('lista-prestato');[cite: 1]
+    const listaRicevuto = document.getElementById('lista-ricevuto');[cite: 1]
+    const bilancioBox = document.getElementById('totale-bilancio-prestiti');[cite: 1]
+    if(!listaPrestato || !listaRicevuto || !auth.currentUser) return;[cite: 1]
     
-    listaPrestato.innerHTML = ''; listaRicevuto.innerHTML = '';
+    listaPrestato.innerHTML = ''; listaRicevuto.innerHTML = '';[cite: 1]
 
     try {
-      const queryPrestiti = await colUtente("prestiti").get();
-      let prestitiSalvati = [];
-      queryPrestiti.forEach((docSnap) => { prestitiSalvati.push({ id: docSnap.id, ...docSnap.data() }); });
+      const queryPrestiti = await colUtente("prestiti").get();[cite: 1]
+      let prestitiSalvati = [];[cite: 1]
+      queryPrestiti.forEach((docSnap) => { prestitiSalvati.push({ id: docSnap.id, ...docSnap.data() }); });[cite: 1]
 
-      let totalePrestati = 0, totaleRicevuti = 0;
-      let prestatiItems = prestitiSalvati.filter(p => p.tipo === 'prestato');
-      let ricevutiItems = prestitiSalvati.filter(p => p.tipo === 'ricevuto');
+      let totalePrestati = 0, totaleRicevuti = 0;[cite: 1]
+      let prestatiItems = prestitiSalvati.filter(p => p.tipo === 'prestato');[cite: 1]
+      let ricevutiItems = prestitiSalvati.filter(p => p.tipo === 'ricevuto');[cite: 1]
 
       prestatiItems.forEach(p => {
-        totalePrestati += p.importo;
-        const li = document.createElement('li');
-        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;
-        listaPrestato.appendChild(li);
+        totalePrestati += p.importo;[cite: 1]
+        const li = document.createElement('li');[cite: 1]
+        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;[cite: 1]
+        listaPrestato.appendChild(li);[cite: 1]
       });
 
       ricevutiItems.forEach(p => {
-        totaleRicevuti += p.importo;
-        const li = document.createElement('li');
-        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;
-        listaRicevuto.appendChild(li);
+        totaleRicevuti += p.importo;[cite: 1]
+        const li = document.createElement('li');[cite: 1]
+        li.innerHTML = `<div><input type="checkbox" onclick="eliminaPrestito('${p.id}')"><strong>${p.nome}</strong>: €${p.importo.toFixed(2)}<br><span style="font-size:10px; color:var(--text-muted);">${p.nota || ''}</span></div><div style="display: flex; gap: 4px;"><button class="btn-modifica" onclick="modificaImporto('${p.id}', ${p.importo})">Mod</button><button class="btn-elimina" onclick="eliminaPrestito('${p.id}')">X</button></div>`;[cite: 1]
+        listaRicevuto.appendChild(li);[cite: 1]
       });
 
-      let bilancioNetto = totalePrestati - totaleRicevuti;
-      if(bilancioBox) bilancioBox.textContent = `€ ${bilancioNetto.toFixed(2)}`;
-    } catch (err) { console.error("Errore prestiti:", err); }
+      let bilancioNetto = totalePrestati - totaleRicevuti;[cite: 1]
+      if(bilancioBox) bilancioBox.textContent = `€ ${bilancioNetto.toFixed(2)}`;[cite: 1]
+    } catch (err) { console.error("Errore prestiti:", err); }[cite: 1]
   }
 
-  function modificaImporto(id, importoAttuale) {
-    let nuovoImporto = prompt("Nuovo importo rimanente:", importoAttuale);
-    if (nuovoImporto !== null && !isNaN(nuogoImporto = nuovoImporto) && nuovoImporto.trim() !== "") {
-      colUtente("prestiti").doc(id).update({ importo: parseFloat(nuovoImporto) })
-      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
-      .catch((e) => { console.error("Errore modifica:", e); });
+  function modificaImporto(id, importoAttuale) {[cite: 1]
+    let nuovoImporto = prompt("Nuovo importo rimanente:", importoAttuale);[cite: 1]
+    if (nuovoImporto !== null && !isNaN(nuogoImporto = nuovoImporto) && nuovoImporto.trim() !== "") {[cite: 1]
+      colUtente("prestiti").doc(id).update({ importo: parseFloat(nuovoImporto) })[cite: 1]
+      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })[cite: 1]
+      .catch((e) => { console.error("Errore modifica:", e); });[cite: 1]
     }
   }
 
-  function eliminaSpesaHome(id) {
-    colUtente("spese").doc(id).delete()
-      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })
-      .catch((e) => { console.error("Errore eliminazione:", e); });
+  function eliminaSpesaHome(id) {[cite: 1]
+    colUtente("spese").doc(id).delete()[cite: 1]
+      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })[cite: 1]
+      .catch((e) => { console.error("Errore eliminazione:", e); });[cite: 1]
   }
 
-  function eliminaEntrata(id) {
-    colUtente("entrate").doc(id).delete()
-      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })
-      .catch((e) => { console.error("Errore eliminazione:", e); });
+  function eliminaEntrata(id) {[cite: 1]
+    colUtente("entrate").doc(id).delete()[cite: 1]
+      .then(() => { setTimeout(() => { caricaDatiHome(); }, 500); })[cite: 1]
+      .catch((e) => { console.error("Errore eliminazione:", e); });[cite: 1]
   }
 
-  function eliminaPrestito(id) {
-    colUtente("prestiti").doc(id).delete()
-      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })
-      .catch((e) => { console.error("Errore eliminazione:", e); });
+  function eliminaPrestito(id) {[cite: 1]
+    colUtente("prestiti").doc(id).delete()[cite: 1]
+      .then(() => { setTimeout(() => { caricaPrestiti(); }, 500); })[cite: 1]
+      .catch((e) => { console.error("Errore eliminazione:", e); });[cite: 1]
   }
 
-  async function leggiScontrino() {
-    const input = document.getElementById('file-scontrino');
-    const status = document.getElementById('ocr-status');
+  async function leggiScontrino() {[cite: 1]
+    const input = document.getElementById('file-scontrino');[cite: 1]
+    const status = document.getElementById('ocr-status');[cite: 1]
     
     if (input.files.length === 0) {
-      alert("Seleziona o scatta una foto dello scontrino.");
+      alert("Seleziona o scatta una foto dello scontrino.");[cite: 1]
       return;
     }
     
-    const file = input.files[0];
-    status.textContent = "Elaborazione OCR in corso... Attendere.";
+    const file = input.files[0];[cite: 1]
+    status.textContent = "Elaborazione OCR in corso... Attendere.";[cite: 1]
 
     try {
-      const result = await Tesseract.recognize(file, 'ita', {
+      const result = await Tesseract.recognize(file, 'ita', {[cite: 1]
         logger: m => {
           if (m.status === 'recognizing text') {
-            status.textContent = `Analisi: ${Math.round(m.progress * 100)}%`;
+            status.textContent = `Analisi: ${Math.round(m.progress * 100)}%`;[cite: 1]
           }
         }
       });
 
-      const testoRiconosciuto = result.data.text;
-      status.textContent = "Scansione completata!";
+      const testoRiconosciuto = result.data.text;[cite: 1]
+      status.textContent = "Scansione completata!";[cite: 1]
       
-      const regexImporto = /(\d+[\.,]\d{2})/g;
-      const match = testoRiconosciuto.match(regexImporto);
+      const regexImporto = /(\d+[\.,]\d{2})/g;[cite: 1]
+      const match = testoRiconosciuto.match(regexImporto);[cite: 1]
 
       if (match && match.length > 0) {
-        let importoTrovato = match[match.length - 1].replace(',', '.');
-        document.getElementById('importo').value = importoTrovato;
-        document.getElementById('nota').value = "Scontrino scansionato";
-        alert(`Trovato importo: €${importoTrovato}. Valore inserito nel modulo spesa!`);
+        let importoTrovato = match[match.length - 1].replace(',', '.');[cite: 1]
+        document.getElementById('importo').value = importoTrovato;[cite: 1]
+        document.getElementById('nota').value = "Scontrino scansionato";[cite: 1]
+        alert(`Trovato importo: €${importoTrovato}. Valore inserito nel modulo spesa!`);[cite: 1]
       } else {
-        alert("Impossibile rilevare un importo chiaro. Inseriscilo manualmente.");
+        alert("Impossibile rilevare un importo chiaro. Inseriscilo manualmente.");[cite: 1]
       }
     } catch (err) {
-      console.error(err);
-      status.textContent = "Errore durante la lettura dello scontrino.";
+      console.error(err);[cite: 1]
+      status.textContent = "Errore durante la lettura dello scontrino.";[cite: 1]
     }
   }
 </script>
